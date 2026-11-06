@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rapports de contrôle – Analyse des résultats</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#award"/></svg></span>
+        <div>
+          <h1>Rapport de contrôle</h1>
+          <p>Analyse des résultats d'examens · Collège</p>
+        </div>
+      </div>
+      <ol class="steps" aria-label="Étapes">
+        <li data-step="1" class="active"><span>1</span> Fichier Excel</li>
+        <li data-step="2"><span>2</span> Vérification</li>
+        <li data-step="3"><span>3</span> Informations</li>
+        <li data-step="4"><span>4</span> Rapport</li>
+      </ol>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="global-alert" class="alert alert-error hidden" role="alert"></div>
+    <div id="pdf-alert" class="alert alert-warn hidden" role="status">
+      <svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#alert"/></svg>
+      <div>LibreOffice n'a pas été détecté : le PDF ne pourra pas être généré. Installez
+      <strong>LibreOffice</strong> (gratuit, libreoffice.org) puis relancez l'application.</div>
+    </div>
+
+    <!-- A. Import du fichier Excel -->
+    <section class="card" id="card-upload">
+      <div class="card-head">
+        <span class="badge-step">A</span>
+        <div><h2>Fichier Excel des notes</h2><p class="muted">Importez le fichier .xlsx ou .xls contenant les résultats de l'examen (export Massar accepté).</p></div>
+      </div>
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Importer un fichier Excel">
+        <svg class="icon icon-xl"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#upload"/></svg>
+        <p class="dz-title">Glissez-déposez votre fichier Excel ici</p>
+        <p class="muted">ou</p>
+        <button type="button" class="btn btn-primary" id="btn-browse">Importer un fichier Excel</button>
+        <p class="muted small">Formats acceptés : .xlsx, .xls · {{ max_mb }} Mo maximum</p>
+        <input type="file" id="file-input" accept=".xlsx,.xls" hidden>
+      </div>
+      <div id="upload-progress" class="progress-wrap hidden">
+        <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
+        <p id="progress-text" class="muted small">Envoi du fichier…</p>
+      </div>
+      <div id="file-bar" class="file-bar hidden">
+        <svg class="icon icon-lg"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#file"/></svg>
+        <div class="file-meta"><strong id="file-name">—</strong><span id="file-sub" class="muted small"></span></div>
+        <button type="button" class="btn btn-light" id="btn-replace"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#refresh"/></svg> Remplacer</button>
+        <button type="button" class="btn btn-danger-light" id="btn-remove"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#trash"/></svg> Supprimer</button>
+      </div>
+    </section>
+
+    {% include 'preview.html' %}
+
+    <!-- B. Informations de l'examen -->
+    <section class="card hidden" id="card-exam">
+      <div class="card-head">
+        <span class="badge-step">B</span>
+        <div><h2>Informations de l'examen</h2><p class="muted">Ces deux dates ne figurent pas dans le fichier Excel : elles doivent être saisies manuellement.</p></div>
+      </div>
+      <div class="grid-2">
+        <label class="field">
+          <span class="label"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#calendar"/></svg> Date de l'examen <em>*</em></span>
+          <input type="date" id="exam-date" required>
+        </label>
+        <label class="field">
+          <span class="label"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#calendar"/></svg> Date de correction <em>*</em></span>
+          <input type="date" id="correction-date" required>
+        </label>
+      </div>
+      <p id="date-error" class="field-error hidden"></p>
+    </section>
+
+    <!-- C. Observations -->
+    <section class="card hidden" id="card-obs">
+      <div class="card-head">
+        <span class="badge-step">C</span>
+        <div><h2>Observations et analyse des résultats</h2><p class="muted">Facultatif : performance générale, difficultés observées, points forts, lacunes, remédiation proposée.</p></div>
+      </div>
+      <textarea id="observations" rows="6" maxlength="{{ max_obs }}" placeholder="Saisissez vos observations ici… (elles apparaîtront dans le rapport)"></textarea>
+      <div class="row-between">
+        <button type="button" class="btn btn-light" id="btn-suggest"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#zap"/></svg> Générer une observation suggérée</button>
+        <span class="muted small"><span id="obs-count">0</span> / {{ max_obs }} caractères</span>
+      </div>
+    </section>
+
+    <!-- D. Génération -->
+    <section class="card hidden" id="card-generate">
+      <div class="card-head">
+        <span class="badge-step">D</span>
+        <div><h2>Générer le rapport</h2><p class="muted">Le rapport est mis en page sur une seule page A4 (portrait), en DOCX et en PDF.</p></div>
+      </div>
+      <button type="button" class="btn btn-primary btn-xl" id="btn-generate">
+        <svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#chart"/></svg> Analyser et générer le rapport
+      </button>
+      <p id="generate-error" class="field-error hidden"></p>
+    </section>
+
+    {% include 'result.html' %}
+  </main>
+
+  <div id="overlay" class="overlay hidden" role="alert" aria-live="assertive">
+    <div class="overlay-box"><div class="spinner"></div>
+      <p id="overlay-text">Traitement en cours…</p>
+      <p class="muted small">La vérification de la page A4 peut prendre quelques secondes.</p></div>
+  </div>
+
+  <footer class="footer muted small">Les données restent sur votre ordinateur · Fichiers temporaires supprimés automatiquement</footer>
+  <script>window.SPRITE = "{{ url_for('static', filename='icons/sprite.svg') }}";</script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

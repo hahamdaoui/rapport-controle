@@ -1,0 +1,19 @@
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+
+# Fichiers temporaires : contiennent des donnees d'eleves, ne jamais publier
+uploads/*
+outputs/*
+static/charts/*
+!uploads/.gitkeep
+!outputs/.gitkeep
+!static/charts/.gitkeep
+
+# Installation hors ligne
+wheels/
+
+# Divers
+.DS_Store
+Thumbs.db

@@ -1,0 +1,30 @@
+<!-- Résultats de la génération et téléchargements (inclus dans index.html) -->
+<section class="card hidden" id="card-result">
+  <div class="card-head">
+    <span class="badge-step ok"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#check"/></svg></span>
+    <div><h2>Rapport généré</h2><p class="muted" id="result-sub"></p></div>
+  </div>
+  <div id="result-warnings"></div>
+
+  <div class="stat-cards" id="result-cards"></div>
+
+  <div class="download-row">
+    <a class="btn btn-primary btn-xl" id="dl-docx" href="#"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#download"/></svg> Télécharger le rapport DOCX</a>
+    <a class="btn btn-navy btn-xl" id="dl-pdf" href="#"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#download"/></svg> Télécharger le rapport PDF</a>
+  </div>
+  <div id="two-page-box" class="alert alert-warn hidden">
+    <svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#alert"/></svg>
+    <div><p id="two-page-text"></p>
+      <button type="button" class="btn btn-light" id="btn-two-pages">Générer la mise en page « 2 pages (lisible) »</button></div>
+  </div>
+
+  <div class="subcard">
+    <h3>Niveaux de maîtrise</h3>
+    <div class="table-scroll"><table class="tbl" id="result-levels"></table></div>
+  </div>
+  <div class="grid-2 charts">
+    <img id="chart1" alt="Répartition des élèves selon les tranches de notes">
+    <img id="chart2" alt="Vue globale des niveaux de maîtrise">
+  </div>
+  <p class="muted small">Vous pouvez modifier les informations, les dates ou les observations ci-dessus, puis cliquer à nouveau sur « Analyser et générer le rapport ».</p>
+</section>

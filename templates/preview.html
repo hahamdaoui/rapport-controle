@@ -1,0 +1,54 @@
+<!-- Aperçu des données extraites et des statistiques (inclus dans index.html) -->
+<section class="card hidden" id="card-preview">
+  <div class="card-head">
+    <span class="badge-step"><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#check"/></svg></span>
+    <div><h2>Vérification des données extraites</h2><p class="muted">Contrôlez les informations, les élèves et les notes avant de générer le rapport.</p></div>
+  </div>
+
+  <div id="issues" class="issues"></div>
+
+  <div class="subcard">
+    <h3><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#edit"/></svg> Informations de l'établissement <span class="muted small">(modifiables ; laissées vides si absentes du fichier)</span></h3>
+    <div class="grid-3" id="meta-grid">
+      <label class="field"><span class="label">N° du contrôle</span><input type="text" data-meta="exam" dir="auto"></label>
+      <label class="field"><span class="label">Semestre</span><input type="text" data-meta="semester" dir="auto"></label>
+      <label class="field"><span class="label">Classe</span><input type="text" data-meta="class" dir="auto"></label>
+      <label class="field span-2"><span class="label">Établissement</span><input type="text" data-meta="school" dir="auto"></label>
+      <label class="field"><span class="label">Année scolaire</span><input type="text" data-meta="year" dir="auto"></label>
+      <label class="field"><span class="label">AREF</span><input type="text" data-meta="academy" dir="auto"></label>
+      <label class="field"><span class="label">Direction provinciale</span><input type="text" data-meta="direction" dir="auto"></label>
+      <label class="field"><span class="label">Professeur</span><input type="text" data-meta="teacher" dir="auto"></label>
+      <label class="field"><span class="label">Matière</span><input type="text" data-meta="subject" dir="auto"></label>
+    </div>
+  </div>
+
+  <details class="subcard" id="mapping-panel">
+    <summary><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#sliders"/></svg> Correspondance des colonnes <span id="mapping-flag" class="pill pill-warn hidden">À vérifier</span></summary>
+    <p class="muted small">La détection est automatique. Si elle est incorrecte, choisissez manuellement les colonnes puis cliquez sur « Appliquer ».</p>
+    <div class="grid-3">
+      <label class="field"><span class="label">Feuille</span><select id="map-sheet"></select></label>
+      <label class="field"><span class="label">Colonne des noms</span><select id="map-name"></select></label>
+      <label class="field"><span class="label">Colonne des notes</span><select id="map-grade"></select></label>
+      <label class="field"><span class="label">Colonne d'absence (facultatif)</span><select id="map-abs"></select></label>
+      <label class="field"><span class="label">1re ligne des élèves</span><input type="number" min="1" id="map-first"></label>
+      <label class="field"><span class="label">Barème de notation</span>
+        <select id="map-scale"><option value="">Automatique</option><option>5</option><option>10</option><option>20</option><option>40</option><option>50</option><option>100</option></select></label>
+    </div>
+    <button type="button" class="btn btn-primary" id="btn-apply-map">Appliquer la correspondance</button>
+  </details>
+
+  <div class="stat-cards" id="stat-cards"></div>
+
+  <div class="subcard" id="levels-preview-wrap">
+    <h3><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#chart"/></svg> Statistiques par niveau de maîtrise</h3>
+    <div class="table-scroll"><table class="tbl" id="levels-preview"></table></div>
+  </div>
+
+  <div class="subcard">
+    <div class="row-between">
+      <h3><svg class="icon"><use href="{{ url_for('static', filename='icons/sprite.svg') }}#users"/></svg> Élèves et notes extraits <span id="students-count" class="muted small"></span></h3>
+      <label class="check"><input type="checkbox" id="only-issues"> Afficher seulement les anomalies</label>
+    </div>
+    <div class="table-scroll tall"><table class="tbl" id="students-table"></table></div>
+  </div>
+</section>
